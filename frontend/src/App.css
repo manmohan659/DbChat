@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.App {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 300px;
+  background-color: #252526;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+}
+
+.sidebar input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #3c3c3c;
+  border: none;
+  color: #ffffff;
+}
+
+.sidebar .connect-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-window {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #2d2d2d;
+  border-radius: 5px;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 70%;
+}
+
+.user-message {
+  background-color: #0078d4;
+  align-self: flex-end;
+}
+
+.ai-message {
+  background-color: #3c3c3c;
+  align-self: flex-start;
+}
+
+.message-icon {
+  margin-right: 10px;
+}
+
+.input-area {
+  display: flex;
+}
+
+.input-area input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  background-color: #3c3c3c;
+  color: #ffffff;
+}
+
+.input-area button {
+  padding: 10px 20px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
