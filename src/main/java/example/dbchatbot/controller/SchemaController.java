@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import example.dbchatbot.service.SchemaService;
 
 @RestController
-@RequestMapping("/schema")
+@RequestMapping("/api/schema")
 public class SchemaController {
 
     private final SchemaService schemaService;
