@@ -21,7 +21,7 @@ public class DatabaseController {
     @PostMapping("/connect")
     public ResponseEntity<String> connectToDatabase(@RequestBody DataBaseConnection dataBaseConnection) {
         try{
-            databaseService.connectAndFetchSchema(connection);
+            databaseService.connectAndFetchSchema(dataBaseConnection);
             return ResponseEntity.ok("Connected to database successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to connect to database: " + e.getMessage());

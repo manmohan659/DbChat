@@ -8,4 +8,9 @@ public class DataBaseConnection {
     private String username;
     private String password;
     private String database;
+
+    public String getDatabase() {
+        return database;
+    }
 }
+

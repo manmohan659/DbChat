@@ -16,13 +16,18 @@ public class DatabaseService {
 
     private String schema;
     private static final Logger logger = LoggerFactory.getLogger(DatabaseService.class);
+    
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    public void connectAndFetchSchema(DatabaseConnection connection) throws Exception {
-        String url = "jdbc:mysql://" +  connection.getHost() + ":" + connection.getPort();
-
+    public void connectAndFetchSchema(DataBaseConnection connection) throws Exception {
+        System.out.println("Attempting to connect to database. Host: " + connection.getHost() + 
+        ", Port: " + connection.getPort() + ", Database: " + connection.getDatabase() + ", Username: " + connection.getUsername());
+        String url = "jdbc:mysql://" + connection.getHost() + ":" + connection.getPort() + "/" + connection.getDatabase();
+        System.out.println("Connection URL: " + url);
         try(Connection conn = DriverManager.getConnection(url, connection.getUsername(), connection.getPassword())){
             if (conn != null) {
-                this.schema = fetchSchemaFromDatabase(conn, connection.getDatabaseName());
+                this.schema = fetchSchemaFromDatabase(conn, connection.getDatabase());
             } else {
                 throw new Exception("Failed to establish connection.");
             }
@@ -32,8 +37,6 @@ public class DatabaseService {
         }
     }
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     public boolean testConnection() {
         try {
