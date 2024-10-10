@@ -1,17 +1,22 @@
 package example.dbchatbot.config;
 
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain.model.chat.ChatOpenAI;
-import dev.langchain.model.openai.OpenAILanguageModel;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class OpenAiChatConfig {
-    static class Simple_prompt{
-        public static void main(String[] args) {
 
-            ChatLanguageModel model = OpenAiChatModel.builder().apiKey("sk-proj-9543454c34543543543543543543543543543543543543543543543543543543").modelName("gpt-3.5-turbo").build();
-            String response = model.generate("What is the capital of the moon?");
-            System.out.println(response);
-        }
+    @Value("${langchain4j.openai.api-key}")
+    private String apiKey;
+
+    @Bean
+    public OpenAiChatModel openAiChatModel() {
+        System.out.println("The API key is  : " +apiKey);
+        return OpenAiChatModel.builder()
+                .apiKey(apiKey)
+                .modelName("gpt-4-0613")
+                .build();
     }
 }

@@ -101,3 +101,11 @@ body {
   border: none;
   cursor: pointer;
 }
+
+.connect-button.success {
+  background-color: #4CAF50;
+}
+
+.connect-button.error {
+  background-color: #f44336;
+}
