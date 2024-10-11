@@ -1,70 +1,35 @@
-# Getting Started with Create React App
+# SQL Assistant Chatbot
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a SQL assistant chatbot built with **Spring Boot** and **MySQL**. It allows users to interact with a chatbot that generates and executes SQL queries (only `SELECT` queries) on a database. The project also integrates with an LLM (e.g., OpenAI's GPT) to generate SQL queries based on natural language inputs.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Natural Language to SQL Conversion**: Converts user queries into `SELECT` SQL statements using LLM.
+- **Execute SQL Queries**: Executes `SELECT` queries on the connected MySQL database.
+- **Database Schema Parsing**: Fetches and processes the database schema for use in SQL query generation.
+- **Result Display**: Fetches results from the database and generates a natural language response.
+- **Case-insensitive SQL Query Generation**: Only generates and executes `SELECT` queries, ignoring other commands like `UPDATE`, `DELETE`, etc.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Java (Spring Boot)**: Backend application framework.
+- **MySQL**: Database for storing and retrieving data.
+- **LangChain4j**: Integration for handling LLM interactions.
+- **React**: Frontend for user interaction with the chatbot.
+- **OpenAI GPT-4**: LLM used for converting natural language to SQL.
+- **Regex**: Used for post-processing the LLM response to extract valid SQL queries.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup Instructions
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Java 17** or higher installed.
+- **MySQL** database installed and running.
+- **Node.js** and **npm** installed for running the React frontend.
+- **OpenAI API Key** for LLM integration.
 
-### `npm run build`
+### 1. Clone the Repository
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+git clone https://github.com/your-repo/sql-assistant-chatbot.git
+cd sql-assistant-chatbot
