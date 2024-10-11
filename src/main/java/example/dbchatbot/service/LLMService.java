@@ -16,7 +16,7 @@ public class LLMService {
         this.sqlGenerator = AiServices.create(SqlGenerator.class, openAiChatModel);
     }
 
-    public String generateSQLQuery(String query, String schema) {
+    public String decideAndRespond(String query, String schema) {
         System.out.println("Generating SQL query for: " + query);
         System.out.println("Using schema: " + schema + "\n-----------------------------------");
         
@@ -30,12 +30,21 @@ public class LLMService {
             return "Error generating SQL: " + e.getMessage();
         }
     }
+    public String generateSQL(String query, String results) {
+        return sqlGenerator.generateSQL(query, results);
+    }
 
     interface SqlGenerator {
-        @SystemMessage("You are an AI assistant that converts natural language queries into SQL queries. " +
-                       "Analyze the given database schema thoroughly and generate an appropriate SQL query based on the user's question. " +
-                       "Be smart with your answer if you feel like user query can be answered without SQL query, in the response mention the answer preciesly, if not than only return the SQL query, without any additional explanation. ")
+        @SystemMessage("You are a SQL assistant that helps users retrieve data from a database. Your only job is to generate `SELECT` queries for retrieving data. " +
+                "You must only return the SQL query without any extra commentary, explanations, or apologies. " +
+                "If the user's question asks for data retrieval, return the appropriate `SELECT` query based on the user's request and the provided schema. " +
+                "Do not explain the query, and do not say that you cannot execute the query. Only return the SQL query as plain text. If your response has select query just reply with one select query which you find fits the most as per user query do not use words like here is select query")
         @UserMessage("Database Schema:\n\n{{schema}}\n\nUser Query: {{query}}")
-        String generateSQL(@V("schema") String schema, @V("query") String query);
+        String decideAndRespond(@V("schema")String schema, @V("query")String query);
+
+        @SystemMessage("You are an AI assistant that provides natural language answers based on query results.")
+        @UserMessage("User Query: {{query}}\n\nQuery Results:\n{{results}}")
+        String generateSQL(@V("query") String query, @V("results") String results);
     }
+
 }

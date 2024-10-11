@@ -1,44 +1,53 @@
 package example.dbchatbot.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import example.dbchatbot.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.io.IOException;
+import java.util.Map;
 
+@Slf4j
 @Service
 public class DatabaseService {
 
+
+    private Connection connection;
     private String schema;
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseService.class);
-    
 
 
-    public void connectAndFetchSchema(DataBaseConnection connection) throws Exception {
-        String url = "jdbc:mysql://" + connection.getHost() + ":" + connection.getPort() + "/" + connection.getDatabase();
-        try (Connection conn = DriverManager.getConnection(url, connection.getUsername(), connection.getPassword())) {
-            if (conn != null) {
-                System.out.println("Connection established successfully");
-                this.schema = fetchSchemaFromDatabase(conn, connection.getDatabase());
-                System.out.println("Schema fetched successfully: " + this.schema);
-            } else {
-                throw new Exception("Failed to establish connection.");
-            }
-        } catch (SQLException e) {
-            System.out.println("SQL Exception occurred: " + e.getMessage());
-            e.printStackTrace();
-            throw new Exception("SQL Exception: " + e.getMessage());
+    public void connectAndFetchSchema(DataBaseConnection dbConnection) throws Exception {
+        if(this.connection == null) {
+        String url = "jdbc:mysql://" + dbConnection.getHost() + ":" + dbConnection.getPort() + "/" + dbConnection.getDatabase();
+        try  {
+                this.connection = DriverManager.getConnection(url, dbConnection.getUsername(), dbConnection.getPassword());
+                    if (connection != null) {
+                        System.out.println("Connection established successfully");
+                        log.info("Connection established successfully");
+                        this.schema = fetchSchemaFromDatabase(this.connection, dbConnection.getDatabase());
+                        System.out.println("Schema fetched successfully: " + this.schema);
+                        log.info("Schema fetched successfully: " + this.schema);
+                    } else {
+                        throw new Exception("Failed to establish connection.");
+                    }
+
+        }catch (SQLException e) {
+                    System.out.println("SQL Exception occurred: " + e.getMessage());
+                    e.printStackTrace();
+                    throw new Exception("SQL Exception: " + e.getMessage());
+                }
+
+        }else{
+            System.out.println("Reusing the existing database connection");
         }
-    }
+        }
 
 
   //  public boolean testConnection() {
@@ -79,6 +88,27 @@ public class DatabaseService {
 
     public String getSchemaFromFile() throws IOException {
         return Files.readString(Path.of("/Users/manmohan/dumps/Schema/testDbSchema.txt"));
+    }
+
+    public List<Map<String, Object>> executeQuery(String query) throws SQLException {
+     if(this.connection == null){
+            throw new SQLException("No active database connection. Please connect first.");
+        }
+     try(Statement stmt = this.connection.createStatement()) {
+         ResultSet rs = stmt.executeQuery(query);
+
+         ResultSetMetaData rsmd = rs.getMetaData();
+         int columnCount = rsmd.getColumnCount();
+         List<Map<String, Object>> list = new ArrayList<>();
+         while (rs.next()) {
+             Map<String, Object> row = new HashMap<>();
+             for (int i = 1; i <= columnCount; i++) {
+                 row.put(rsmd.getColumnName(i), rs.getObject(i));
+             }
+             list.add(row);
+         }
+         return list;
+     }
     }
 
 }
