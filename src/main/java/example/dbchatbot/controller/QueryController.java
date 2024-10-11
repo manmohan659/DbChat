@@ -29,6 +29,7 @@ public class QueryController {
     @PostMapping("/nl-to-sql")
     public ResponseEntity<String> query(@RequestBody UserQuery userQuery) {
         try {
+            String sqlQuery = "";
             // Fetch the schema when the query is submitted
             String schema = databaseService.getSchema();
             if (schema == null || schema.isEmpty()) {
@@ -40,7 +41,9 @@ public class QueryController {
             System.out.println("User Query: " + userQuery.getQuery());
 
             String sql = llmService.decideAndRespond(userQuery.getQuery(), schema);
-            String sqlQuery = extractSQLQuery(sql);
+            if(sql.contains("SELECT")) {
+                 sqlQuery = extractSQLQuery(sql);
+            }
             System.out.println("Generated SQL: " + sql);
             if(!sqlQuery.isEmpty()) {
                 List<Map<String, Object>> results = databaseService.executeQuery(sqlQuery.trim());
@@ -74,10 +77,10 @@ public class QueryController {
         }
         return sb.toString();
     }
-    private boolean isQuery(String query){
-        String trimmedQuery = query.trim().toUpperCase();
-        return trimmedQuery.matches("^(Select)\\s.*");
-    }
+//    private boolean isQuery(String query){
+//        String trimmedQuery = query.trim().toUpperCase();
+//        return trimmedQuery.matches("^(SELECT)\\s.*");
+//    }
     private String extractSQLQuery(String llmResponse){
         Pattern sqlPattern = Pattern.compile("(?i)(SELECT\\s+.*?;)", Pattern.DOTALL);
         Matcher matcher = sqlPattern.matcher(llmResponse);
@@ -85,7 +88,7 @@ public class QueryController {
         if(matcher.find()){
             return matcher.group(1).trim();
         } else{
-            throw new IllegalArgumentException("");
+            return llmResponse;
         }
     }
 

@@ -21,7 +21,7 @@ public class LLMService {
         System.out.println("Using schema: " + schema + "\n-----------------------------------");
         
         try {
-            String result = sqlGenerator.generateSQL(schema, query);
+            String result = sqlGenerator.decideAndRespond(schema, query);
             System.out.println("Generated SQL: " + result);
             return result;
         } catch (Exception e) {
@@ -35,10 +35,12 @@ public class LLMService {
     }
 
     interface SqlGenerator {
-        @SystemMessage("You are a SQL assistant that helps users retrieve data from a database. Your only job is to generate `SELECT` queries for retrieving data. " +
-                "You must only return the SQL query without any extra commentary, explanations, or apologies. " +
-                "If the user's question asks for data retrieval, return the appropriate `SELECT` query based on the user's request and the provided schema. " +
-                "Do not explain the query, and do not say that you cannot execute the query. Only return the SQL query as plain text. If your response has select query just reply with one select query which you find fits the most as per user query do not use words like here is select query")
+        @SystemMessage("\"You are a SQL assistant that helps users retrieve data from a database. You should only generate `SELECT` queries when asked to retrieve data, such as table rows or specific columns. \" +\n" +
+                "                   \"If the user query involves anything that requires modifying the database, such as `UPDATE`, `DELETE`, `DROP`, or `INSERT`, you should not generate a query. \" +\n" +
+                "                   \"Only generate `SELECT` queries and avoid any other SQL commands. \" +\n" +
+                "                   \"This is very important : Use reasoning to determine if the user's question can be answered by looking at the schema or requires executing a `SELECT` query. \" +\n" +
+                "                    \"If user requests anything else which is not related to database. Please reply with I am database assistant, Need help with queries lets chat. Baically do not entertain anything else. Users may type greeting messages like Hi, hello greet and reply them as a database assistant \" +\n" +
+                "                   \"If a `SELECT` query is needed, generate only that, no additional commentary.\"")
         @UserMessage("Database Schema:\n\n{{schema}}\n\nUser Query: {{query}}")
         String decideAndRespond(@V("schema")String schema, @V("query")String query);
 
