@@ -13,7 +13,6 @@ public class OpenAiChatConfig {
 
     @Bean
     public OpenAiChatModel openAiChatModel() {
-        System.out.println("The API key is  : " +apiKey);
         return OpenAiChatModel.builder()
                 .apiKey(apiKey)
                 .modelName("gpt-4-0613")

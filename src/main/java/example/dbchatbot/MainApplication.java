@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MainApplication {
     public static void main(String[] args) {
+        System.setProperty("io.netty.resolver.dns.use-system-resolver", "true");
         SpringApplication.run(MainApplication.class, args);
     }
 
