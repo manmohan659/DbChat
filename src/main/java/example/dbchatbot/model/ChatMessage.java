@@ -1,21 +1,40 @@
 package example.dbchatbot.model;
 
-public class ChatMessage {
+import lombok.Data;
+import java.io.Serializable;
+import java.time.Instant;
+
+@Data
+public class ChatMessage implements Serializable {
+    private String messageId;
+    private String sessionId;
     private String message;
-
-    // Constructors
-    public ChatMessage() {}
-
-    public ChatMessage(String message) {
-        this.message = message;
+    private boolean isUser;
+    private Instant timestamp;
+    private String generatedSql;
+    private MessageType type;
+    
+    public enum MessageType {
+        QUERY,
+        RESPONSE,
+        ERROR,
+        SYSTEM
     }
-
-    // Getter and Setter
-    public String getMessage() {
-        return message;
+    
+    public ChatMessage() {
+        this.timestamp = Instant.now();
     }
-
-    public void setMessage(String message) {
+    
+    public ChatMessage(String sessionId, String message, boolean isUser) {
+        this();
+        this.sessionId = sessionId;
         this.message = message;
+        this.isUser = isUser;
+        this.messageId = generateMessageId();
+        this.type = isUser ? MessageType.QUERY : MessageType.RESPONSE;
+    }
+    
+    private String generateMessageId() {
+        return sessionId + "-" + timestamp.toEpochMilli();
     }
 }
