@@ -39,6 +39,7 @@ public class DatabaseController {
                     .orElseGet(() -> sessionService.createSession(sessionId));
 
             databaseService.connectAndFetchSchema(session.getUserId(), dataBaseConnection);
+            System.out.println("Successfully connected to database for session" + sessionId);
             logger.info("Successfully connected to database for session: {}", sessionId);
 
             Map<String, String> successResponse = new HashMap<>();
