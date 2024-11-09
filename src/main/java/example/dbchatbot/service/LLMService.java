@@ -64,9 +64,6 @@ public class LLMService {
     }
 
 
-
-    // LLMService.java
-
     interface SqlGenerator {
         @SystemMessage(
                 "You are a MySQL SQL specialist responsible for generating precise and executable SQL 'SELECT' queries. " +

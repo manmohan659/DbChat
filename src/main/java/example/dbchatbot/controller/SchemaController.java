@@ -22,7 +22,7 @@ public class SchemaController {
         this.schemaService = schemaService;
     }
 
-// SchemaController.java
+
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadSchema(

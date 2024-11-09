@@ -159,7 +159,6 @@ public class SessionService {
             throw new RuntimeException("Failed to delete session", e);
         }
     }
-    // In SessionService.java
 
     public List<ChatMessage> getConversationHistory(String sessionId) {
         return getChatHistory(sessionId);
