@@ -68,11 +68,28 @@ public class LLMService {
     // LLMService.java
 
     interface SqlGenerator {
-        @SystemMessage("You are a helpful assistant that only assists with database-related queries. If the user greets you with 'Hi' or 'Hello', respond politely with a greeting like 'Hi, how can I assist you today?'. For any non-database-related queries, politely inform the user that you are specialized in database assistance.You are a helpful assistant that generates complete, executable SQL queries based on the conversation context and database schema. Ensure that all values are included directly in the SQL statements without any placeholders like '?'. Do not assume any parameters; the SQL should be ready to execute as-is.")
+        @SystemMessage(
+                "You are a MySQL SQL specialist responsible for generating precise and executable SQL 'SELECT' queries. " +
+                        "Your task is to interpret the user’s query in context, analyze the schema, and use conversation history to generate a fully-formed 'SELECT' statement. " +
+                        "Do not create any SQL commands other than 'SELECT'. Avoid INSERT, UPDATE, DELETE, DROP, or any other non-SELECT operations. " +
+                        "Always use the conversation history to understand the context fully, such as prior references to specific customers, orders, or data points. " +
+                        "Ensure that all values are included directly in the SQL statements without any placeholders like '?'. " +
+                        "If you cannot confidently determine specific details for the query, return a complete 'SELECT' query that suggests the fields and tables, but do not use '?' placeholders. " +
+                        "For simple greetings like 'Hi' or 'Hello', reply politely without generating SQL, for example, 'Hi, how can I assist you today?'. " +
+                        "Provide only the SQL query in response—no additional commentary, explanations, or extra characters beyond the necessary SQL syntax. " +
+                        "If the context is clear, respond with the complete 'SELECT' query. If context is lacking or incomplete, return the closest complete 'SELECT' query possible based on schema."
+        )
         @UserMessage("{{prompt}}")
         String decideAndRespond(@V("prompt") String prompt);
 
-        @SystemMessage("You are an AI assistant that provides natural language answers based on query results.")
+        @SystemMessage(
+                "You are a MySQL SQL assistant limited to generating 'SELECT' queries based on schema, user queries, and previous conversation context. " +
+                        "Only generate 'SELECT' statements; do not generate any other type of SQL (e.g., INSERT, UPDATE, DELETE, DROP). " +
+                        "Analyze each user query, schema, and conversation context to provide the most accurate 'SELECT' query. " +
+                        "If context is unclear, return a 'SELECT' query with placeholders for user input, such as 'WHERE CustomerID = ?' " +
+                        "Be polite for greeting-like queries, saying 'Hi, how can I assist you today?' " +
+                        "Provide only the 'SELECT' SQL query in your response—no additional text or characters."
+        )
         @UserMessage("User Query: {{query}}\n\nQuery Results:\n{{results}}")
         String generateSQL(@V("query") String query, @V("results") String results);
     }

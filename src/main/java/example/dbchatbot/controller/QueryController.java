@@ -57,7 +57,12 @@ public class QueryController {
             }
             System.out.println("UserQuery: " + userQuery.getQuery());
             System.out.println(schema);
+
             List<ChatMessage> history = sessionService.getConversationHistory(sessionId);
+            for(ChatMessage chatMessage : history) {
+                System.out.println("History : " + chatMessage.toString());
+            }
+
             String llmResponse = llmService.decideAndRespond(userQuery.getQuery(), schema, history);
 
             // Generate SQL
@@ -67,11 +72,18 @@ public class QueryController {
             logger.debug("LLM Response: {}", llmResponse);
             logger.debug("Extracted SQL Query: {}", sqlQuery);
 
-            // Initialize AI message
             ChatMessage aiMessage = new ChatMessage(sessionId, llmResponse, false);
             aiMessage.setType(ChatMessage.MessageType.RESPONSE);
-            aiMessage.setGeneratedSql(sqlQuery);
 
+            // Check if SQL query is present
+            if (sqlQuery == null) {
+                // No SQL query extracted; return the LLM response directly
+                sessionService.saveChatMessage(aiMessage);
+                return ResponseEntity.ok(aiMessage);
+            }
+
+            // Set the generated SQL only if it's not null
+            aiMessage.setGeneratedSql(sqlQuery);
             // Check if there is a database connection
 
             if (!hasDatabaseConnection) {
