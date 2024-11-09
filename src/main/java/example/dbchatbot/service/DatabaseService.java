@@ -7,6 +7,10 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
@@ -50,16 +54,39 @@ public class DatabaseService {
         }
 
         List<Map<String, Object>> results = new ArrayList<>();
+        // Define a DateTimeFormatter
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
-            
+
             ResultSetMetaData metadata = rs.getMetaData();
             int columnCount = metadata.getColumnCount();
 
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
-                    row.put(metadata.getColumnName(i), rs.getObject(i));
+                    Object value = rs.getObject(i);
+
+                    if (value instanceof java.sql.Timestamp) {
+                        // Convert Timestamp to LocalDateTime and format
+                        java.sql.Timestamp ts = (java.sql.Timestamp) value;
+                        LocalDateTime dateTime = ts.toLocalDateTime();
+                        value = dateTime.format(dateTimeFormatter);
+                    } else if (value instanceof java.sql.Date) {
+                        // Convert java.sql.Date to LocalDate and format
+                        java.sql.Date date = (java.sql.Date) value;
+                        LocalDate localDate = date.toLocalDate();
+                        value = localDate.format(dateFormatter);
+                    } else if (value instanceof java.util.Date) {
+                        // Convert java.util.Date to LocalDateTime and format
+                        java.util.Date date = (java.util.Date) value;
+                        LocalDateTime dateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                        value = dateTime.format(dateTimeFormatter);
+                    }
+
+                    row.put(metadata.getColumnName(i), value);
                 }
                 results.add(row);
             }
@@ -128,5 +155,10 @@ public class DatabaseService {
 
     public String getSchema(String userId) throws Exception {
         return sessionService.getSchema(userId);
+    }
+
+    public boolean hasConnection(String userId) {
+        Connection connection = getConnectionForUser(userId);
+        return connection != null;
     }
 }

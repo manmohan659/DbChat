@@ -3,6 +3,7 @@ package example.dbchatbot.model;
 import lombok.Data;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Map;
 
 @Data
 public class ChatMessage implements Serializable {
@@ -11,14 +12,19 @@ public class ChatMessage implements Serializable {
     private String message;
     private boolean isUser;
     private Instant timestamp;
+
+
+
     private String generatedSql;
     private MessageType type;
+    private Map<String, Object> tableData; // Ensure getters and setters are present
     
     public enum MessageType {
         QUERY,
         RESPONSE,
         ERROR,
-        SYSTEM
+        SYSTEM,
+        TABLE
     }
     
     public ChatMessage() {

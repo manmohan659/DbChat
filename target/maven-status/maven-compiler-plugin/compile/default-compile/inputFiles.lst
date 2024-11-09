@@ -1,11 +1,15 @@
-/Users/manmohan/dbchat/src/main/java/example/dbchatbot/controller/QueryController.java
+/Users/manmohan/dbchat/src/main/java/example/dbchatbot/service/SessionService.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/service/SchemaService.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/service/LLMService.java
+/Users/manmohan/dbchat/src/main/java/example/dbchatbot/model/ChatSession.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/MainApplication.java
+/Users/manmohan/dbchat/src/main/java/example/dbchatbot/config/RedisConfig.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/controller/SchemaController.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/model/ChatMessage.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/service/DatabaseService.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/config/OpenAiChatConfig.java
-/Users/manmohan/dbchat/src/main/java/example/dbchatbot/controller/DatabaseController.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/controller/UserQuery.java
+/Users/manmohan/dbchat/src/main/java/example/dbchatbot/controller/QueryController.java
+/Users/manmohan/dbchat/src/main/java/example/dbchatbot/controller/SessionController.java
+/Users/manmohan/dbchat/src/main/java/example/dbchatbot/controller/DatabaseController.java
 /Users/manmohan/dbchat/src/main/java/example/dbchatbot/model/DataBaseConnection.java
