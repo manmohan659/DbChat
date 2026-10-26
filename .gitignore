@@ -78,3 +78,7 @@ logs/
 *.bak
 *.swp
 *~.nib
+
+.env
+.env.*
+!.env.example
